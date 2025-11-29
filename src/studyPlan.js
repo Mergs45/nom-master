@@ -6,8 +6,8 @@ export const studyPlanLevels = [
     color: "text-indigo-600",
     modules: [
       { id: "nom030", code: "NOM-030", title: "Servicios Preventivos", locked: false },
-      { id: "nom019", code: "NOM-019", title: "Comisiones de SyH", locked: true },
-      { id: "nom021", code: "NOM-021", title: "Riesgos de Trabajo", locked: true }
+      { id: "nom019", code: "NOM-019", title: "Comisiones de SyH", locked: false },
+      { id: "nom021", code: "NOM-021", title: "Riesgos de Trabajo", locked: false }
     ]
   },
   {
@@ -15,7 +15,7 @@ export const studyPlanLevels = [
     title: "Infraestructura",
     color: "text-blue-600",
     modules: [
-      { id: "nom001", code: "NOM-001", title: "Edificios y Locales", locked: true },
+      { id: "nom001", code: "NOM-001", title: "Edificios y Locales", locked: false },
       { id: "nom002", code: "NOM-002", title: "Prevención de Incendios", locked: true },
       { id: "nom026", code: "NOM-026", title: "Colores y Señales", locked: true }
     ]

@@ -5,6 +5,20 @@ import { studyPlanLevels as basePlan } from "./studyPlan";
 
 import Nom017Module from "./modules/Nom17Module";
 import Nom030Module from "./modules/Nom30Module";
+import Nom19Module from "./modules/Nom19Module";
+import Nom021Module from "./modules/Nom21Module";
+import Nom001Module from "./modules/Nom001Module";
+// import Nom002Module from "./modules/Nom002Module";
+// import Nom026Module from "./modules/Nom026Module";
+// import Nom009Module from "./modules/Nom009Module";
+// import Nom029Module from "./modules/Nom029Module";
+// import Nom004Module from "./modules/Nom004Module";
+// import Nom006Module from "./modules/Nom006Module";
+// import Nom027Module from "./modules/Nom027Module";
+// import Nom036Module from "./modules/Nom036Module";
+// import Nom025Module from "./modules/Nom025Module";
+// import Nom113Module from "./modules/Nom113Module";
+// import Nom115Module from "./modules/Nom115Module";
 
 function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
@@ -38,27 +52,52 @@ export default function App() {
 
   const totalModules = studyPlanLevels.reduce((acc, l) => acc + l.modules.length, 0);
   const doneCount = completed.length;
+  const [unlockMessage, setUnlockMessage] = useState(null);
 
-  const markCompleted = (moduleId) => {
-    if (!completed.includes(moduleId)) {
-      setCompleted(prev => [...prev, moduleId]);
+const markCompleted = (moduleId) => {
+  // marcar completado
+  if (!completed.includes(moduleId)) {
+    setCompleted(prev => [...prev, moduleId]);
+  }
+
+  setStudyPlanLevels(prev => {
+    const clone = deepClone(prev);
+
+    // 1 — ¿de qué nivel es este módulo?
+    let levelIndex = -1;
+    for (let i = 0; i < clone.length; i++) {
+      if (clone[i].modules.some(m => m.id === moduleId)) {
+        levelIndex = i;
+        break;
+      }
     }
 
-    setStudyPlanLevels(prev => {
-      const clone = deepClone(prev);
+    if (levelIndex === -1) return clone; // no pasó nada
 
-      for (let lvl of clone) {
-        const idx = lvl.modules.findIndex(m => m.id === moduleId);
-        if (idx !== -1) {
-          const next = lvl.modules[idx + 1];
-          if (next && next.locked) next.locked = false;
-          break;
-        }
-      }
+    // 2 — validar si TODO el nivel está completado
+    const currentLevel = clone[levelIndex];
 
-      return clone;
-    });
-  };
+    const levelCompleted = currentLevel.modules.every(m =>
+      completed.includes(m.id) || m.id === moduleId
+    );
+
+    // 3 — si está completo → desbloquea todo el siguiente nivel
+    if (levelCompleted && clone[levelIndex + 1]) {
+  clone[levelIndex + 1].modules.forEach(mod => {
+    mod.locked = false;
+  });
+
+  // activar mensaje
+  setUnlockMessage(`Nivel ${levelIndex + 2} desbloqueado`);
+
+  // quitarlo después de 3s
+  setTimeout(() => setUnlockMessage(null), 3000);
+}
+
+
+    return clone;
+  });
+};
 
   const openModule = (moduleId) => {
     let allowed = false;
@@ -74,10 +113,34 @@ export default function App() {
     }
   };
 
-  const renderActive = () => {
+const renderActive = () => {
     switch (activeTab) {
-      case "nom017": return <Nom017Module onComplete={markCompleted} />;
+      // Nivel 1
       case "nom030": return <Nom030Module onComplete={markCompleted} />;
+      case "nom019": return <Nom19Module onComplete={markCompleted} />;
+      case "nom021": return <Nom021Module onComplete={markCompleted} />;
+
+      // Nivel 2
+      case "nom001": return <Nom001Module onComplete={markCompleted} />;
+      case "nom002": return <Nom002Module onComplete={markCompleted} />;
+      case "nom026": return <Nom026Module onComplete={markCompleted} />;
+
+      // Nivel 3
+      case "nom009": return <Nom009Module onComplete={markCompleted} />;
+      case "nom029": return <Nom029Module onComplete={markCompleted} />;
+      case "nom004": return <Nom004Module onComplete={markCompleted} />;
+      case "nom006": return <Nom006Module onComplete={markCompleted} />;
+      case "nom027": return <Nom027Module onComplete={markCompleted} />;
+
+      // Nivel 4 (Aquí estaba la 017)
+      case "nom017": return <Nom017Module onComplete={markCompleted} />;
+      case "nom036": return <Nom036Module onComplete={markCompleted} />;
+      case "nom025": return <Nom025Module onComplete={markCompleted} />;
+
+      // Nivel 5
+      case "nom113": return <Nom113Module onComplete={markCompleted} />;
+      case "nom115": return <Nom115Module onComplete={markCompleted} />;
+
       default:
         return <DashboardView setActiveTab={(id)=>openModule(id)} plan={studyPlanLevels} />;
     }
@@ -249,6 +312,17 @@ export default function App() {
           </div>
         </div>
       </aside>
+
+        {unlockMessage && (
+          <div className="
+            absolute left-1/2 top-4 transform -translate-x-1/2 
+            bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-lg
+            text-sm font-bold tracking-wide animate-bounce-soft animate-fade
+            z-50
+          ">
+            {unlockMessage} 🎉
+          </div>
+        )}
 
       {/* MAIN + ANIMACIÓN FADE */}
       <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-50/50 relative">
