@@ -1,121 +1,214 @@
 // src/data/nom001.js
 export const nom001Data = {
   id: "nom001",
+  code: "NOM-001",
   level: 2,
-  levelTitle: "Nivel 2: Infraestructura",
+  levelTitle: "Nivel 2: Seguridad Eléctrica",
   title: "NOM-001-STPS-2008",
-  subtitle: "Edificios, locales, instalaciones y áreas en los centros de trabajo - Condiciones de seguridad.",
-  summary: "Establece las condiciones de seguridad en la infraestructura física (pisos, techos, paredes, escaleras, rampas) para prevenir riesgos como caídas, resbalones y colapsos estructurales.",
-  
+  subtitle: "Edificios, locales, instalaciones y áreas en los centros de trabajo – Condiciones de seguridad.",
+  summary:
+    "Establece las condiciones mínimas de seguridad que deben existir en los centros de trabajo donde se maneja energía eléctrica, así como medidas preventivas, mantenimiento, señalización y evaluación de riesgos eléctricos.",
+
+  // ------------------------------------------------------
+  // DEFINICIONES
+  // ------------------------------------------------------
   definitions: [
-    { term: "Condición Insegura", def: "Circunstancia física peligrosa en el ambiente de trabajo (ej. piso resbaloso, falta de barandal)[cite: 58]." },
-    { term: "Escalas Fijas", def: "Peldaños sujetos permanentemente a una superficie vertical (ej. para subir a silos o azoteas)[cite: 60]." },
-    { term: "Escalas Móviles", def: "Aparato portátil (escalera de mano) para subir o bajar de un nivel a otro[cite: 61]." },
-    { term: "Conservación", def: "Mantenimiento preventivo y correctivo para asegurar la seguridad de las instalaciones[cite: 59]." }
+    {
+      term: "Instalación eléctrica",
+      def: "Conjunto de circuitos, equipos, conductores, tableros, canalizaciones y dispositivos destinados a la generación, transformación, transmisión, distribución o utilización de energía eléctrica."
+    },
+    {
+      term: "Riesgo eléctrico",
+      def: "Posibilidad de daño por contactos directos o indirectos, arco eléctrico, fallas a tierra o sobrecargas."
+    },
+    {
+      term: "Mantenimiento",
+      def: "Acciones preventivas o correctivas necesarias para asegurar el funcionamiento seguro de las instalaciones eléctricas."
+    },
+    {
+      term: "Contacto directo",
+      def: "Cuando una persona toca de manera accidental o intencional una parte activa de la instalación eléctrica."
+    },
+    {
+      term: "Contacto indirecto",
+      def: "Contacto con partes metálicas que no deberían estar energizadas, pero lo están por una falla."
+    }
   ],
 
+  // ------------------------------------------------------
+  // OBLIGACIONES
+  // ------------------------------------------------------
   obligations: {
     patron: [
-      "Conservar las instalaciones en condiciones seguras (orden, limpieza, reparaciones)[cite: 73].",
-      "Realizar verificaciones oculares cada 12 meses para identificar daños[cite: 74].",
-      "Realizar verificaciones extraordinarias después de sismos, incendios o eventos climáticos[cite: 76].",
-      "Contar con sanitarios, retretes y lavabos limpios y seguros[cite: 79].",
-      "Proporcionar información a los trabajadores sobre el uso seguro de las áreas[cite: 82]."
+      "Evaluar los riesgos eléctricos presentes en las áreas de trabajo.",
+      "Contar con planos actualizados de la instalación eléctrica.",
+      "Mantener en condiciones seguras las instalaciones eléctricas conforme al mantenimiento preventivo.",
+      "Asegurar que los conductores, canalizaciones, tableros y protecciones sean los adecuados.",
+      "Proveer señalización preventiva en lugares con riesgo eléctrico.",
+      "Capacitar a los trabajadores expuestos a riesgos eléctricos.",
+      "Contar con equipo de protección personal (EPP) adecuado para trabajos eléctricos.",
+      "Garantizar que solo personal autorizado realice trabajos eléctricos."
     ],
     worker: [
-      "Informar al patrón sobre las condiciones inseguras detectadas (ej. un escalón roto, una lámpara fundida)[cite: 84].",
-      "Dar a las áreas el uso para el que fueron diseñadas (no usar techos como almacén si no lo son)[cite: 86].",
-      "Participar en la conservación del centro de trabajo (orden y limpieza)[cite: 86]."
+      "Reportar condiciones inseguras relacionadas con instalaciones eléctricas.",
+      "Cumplir los procedimientos de seguridad establecidos.",
+      "Usar el equipo de protección personal proporcionado.",
+      "Evitar manipular instalaciones eléctricas sin autorización.",
+      "Participar en la capacitación impartida por el patrón."
     ]
   },
 
+  // ------------------------------------------------------
+  // SECCIONES TÉCNICAS
+  // ------------------------------------------------------
   sections: [
-    { 
-      title: "Pisos y Pasillos", 
-      icon: "Layers", 
-      content: "La base de la seguridad diaria:",
+    {
+      title: "Requisitos de Instalaciones Eléctricas",
+      icon: "HardHat",
       bullets: [
-        "Deben mantenerse limpios y ordenados[cite: 89].",
-        "Los pasillos deben estar delimitados (líneas amarillas de 5cm)[cite: 92].",
-        "Deben ser llanos (planos) y antiderrapantes[cite: 125].",
-        "Las aberturas (coladeras, registros) deben tener protecciones o señalización[cite: 128]."
-      ] 
+        "Canalizaciones y conductores deben tener resistencia adecuada y estar en buen estado.",
+        "Los tableros de distribución deben contar con protecciones termo-magnéticas.",
+        "Debe haber continuidad en los sistemas de puesta a tierra.",
+        "Los interruptores y dispositivos de protección deben estar identificados."
+      ]
     },
-    { 
-      title: "Techos y Paredes", 
-      icon: "Home", 
-      content: "Estructura y protección:",
+    {
+      title: "Protecciones contra Riesgos Eléctricos",
+      icon: "AlertTriangle",
       bullets: [
-        "Techos: Deben permitir la salida de líquidos (drenaje) y soportar cargas solo si fueron diseñados para ello[cite: 105, 108].",
-        "Paredes: Colores que eviten reflexión excesiva (deslumbramiento) y señalización en zonas de riesgo[cite: 112, 117]."
-      ] 
+        "Uso de interruptores diferenciales donde exista humedad o riesgo de contacto indirecto.",
+        "Protección contra sobrecorrientes con dispositivos calibrados.",
+        "Cubiertas protectoras en partes energizadas expuestas."
+      ]
+    },
+    {
+      title: "Señalización y Advertencias",
+      icon: "FileText",
+      bullets: [
+        "Letreros visibles en tableros eléctricos.",
+        "Indicaciones de voltaje elevado.",
+        "Identificación de áreas restringidas por riesgo eléctrico."
+      ]
+    },
+    {
+      title: "Mantenimiento Eléctrico",
+      icon: "ClipboardCheck",
+      bullets: [
+        "Debe ser realizado por personal capacitado y autorizado.",
+        "El mantenimiento preventivo debe documentarse.",
+        "Revisión periódica de conexiones, conductores y dispositivos de protección.",
+        "Pruebas de aislamiento y continuidad."
+      ]
+    },
+    {
+      title: "Trabajos en Instalaciones Energizadas",
+      icon: "Activity",
+      bullets: [
+        "Solo personal autorizado y con EPP puede intervenir.",
+        "Debe haber procedimientos escritos para trabajos energizados.",
+        "Uso de herramientas dieléctricas, guantes aislantes y protectores faciales.",
+        "Bloqueo y etiquetado obligatorio para evitar energización accidental."
+      ]
     }
   ],
 
-  // --- GUÍA INTERACTIVA: INSPECTOR DE DIMENSIONES ---
+  // ------------------------------------------------------
+  // GUÍA INTERACTIVA (EXTRA MEJORADA)
+  // ------------------------------------------------------
   interactiveGuide: [
     {
-      id: "escaleras",
-      name: "Escaleras Fijas",
-      icon: "Menu", 
-      description: "Elementos estructurales para comunicación entre niveles.",
-      detailsTitle: "Medidas Reglamentarias (7.5)",
+      id: "evaluacion",
+      icon: "HardHat",
+      name: "Evaluación de Instalaciones",
+      description: "Identificación de condiciones inseguras en sistemas eléctricos.",
+      detailsTitle: "Inspección de Instalación Eléctrica",
       details: [
-        "Ancho mínimo: 56 cm (tramos rectos)[cite: 132].",
-        "Huella mínima: 25 cm[cite: 145].",
-        "Peralte máximo: 23 cm[cite: 145].",
-        "Altura de barandal: 90 cm (±10 cm)[cite: 192].",
-        "Todas las huellas y peraltes deben ser iguales (variación máx ±0.5 cm)[cite: 138]."
+        "Verificación del calibre de conductores.",
+        "Revisión de continuidad en tierra física.",
+        "Estado físico de canalizaciones.",
+        "Identificación de protecciones faltantes.",
+        "Detección de sobrecalentamientos o falsos contactos."
       ]
     },
     {
-      id: "rampas",
-      name: "Rampas",
-      icon: "Minimize2", 
-      description: "Superficies inclinadas para tránsito de personas o materiales.",
-      detailsTitle: "Reglas de Pendiente y Seguridad (7.6)",
+      id: "protecciones",
+      icon: "Shield",
+      name: "Protecciones Eléctricas",
+      description: "Dispositivos de seguridad obligatorios.",
+      detailsTitle: "Sistemas de Protección",
       details: [
-        "Pendiente máx (Personas): 10%[cite: 215].",
-        "Pendiente máx (Mantenimiento): 17%[cite: 216].",
-        "Ancho: Suficiente para evitar obstrucciones o el ancho del vehículo + 60cm[cite: 227].",
-        "Barandal lateral: Obligatorio si la altura es mayor a 150 cm[cite: 228].",
-        "Distancia libre al techo: Mínimo 200 cm[cite: 236]."
+        "Interruptores termomagnéticos.",
+        "Fusibles calibrados.",
+        "Interruptores diferenciales.",
+        "Protección contra arco eléctrico.",
+        "Sistemas de paro de emergencia."
       ]
     },
     {
-      id: "escalas_fijas",
-      name: "Escalas Fijas (Gato)",
-      icon: "ArrowUp", 
-      description: "Escaleras verticales sujetas a estructuras (Silos, Torres).",
-      detailsTitle: "Requisitos de Seguridad (7.7.1)",
+      id: "mantenimiento",
+      icon: "ClipboardCheck",
+      name: "Mantenimiento Preventivo",
+      description: "Revisión periódica del sistema eléctrico.",
+      detailsTitle: "Plan de Mantenimiento",
       details: [
-        "Ancho mínimo: 40 cm[cite: 249].",
-        "Distancia entre peldaños: Máx 38 cm[cite: 254].",
-        "Separación pared-peldaño: Mínimo 18 cm (para meter el pie)[cite: 264].",
-        "Jaula de seguridad: Obligatoria a partir de 200 cm de altura[cite: 266].",
-        "Descansos: Cada 10 metros de altura[cite: 268]."
+        "Limpieza y ajuste de tableros.",
+        "Revisión de torque en conexiones.",
+        "Prueba de aislamiento.",
+        "Identificación de humedad o corrosión.",
+        "Registro documental obligatorio."
       ]
     },
     {
-      id: "escalas_moviles",
-      name: "Escalas Portátiles",
-      icon: "Move", 
-      description: "Escaleras de mano (tijera o extensión).",
-      detailsTitle: "Reglas de Uso (7.7.2)",
+      id: "trabajo_energizado",
+      icon: "Activity",
+      name: "Trabajo Energizado",
+      description: "Indicaciones clave para intervenir en sistemas activos.",
+      detailsTitle: "Procedimientos de Trabajo Energizado",
       details: [
-        "Regla de Inclinación: 1 metro de separación por cada 4 de altura (1:4)[cite: 282].",
-        "Solo usar si tienen zapatas antiderrapantes[cite: 286].",
-        "Prohibido usar si tienen grasa o aceite[cite: 287].",
-        "Para trabajos eléctricos: Deben ser de material no conductor (fibra de vidrio/madera)[cite: 288]."
+        "Permiso escrito antes de intervenir.",
+        "Revisión de herramientas dieléctricas.",
+        "Verificación de ausencia de energía (prueba – probar – probar).",
+        "Uso de EPP contra arco eléctrico.",
+        "Supervisión durante trabajos críticos."
       ]
     }
   ],
 
+  // ------------------------------------------------------
+  // QUIZ
+  // ------------------------------------------------------
   quiz: [
-    { q: "¿Cuál es la altura reglamentaria para un barandal de escalera?", options: ["80 cm", "90 cm (±10)", "110 cm"], correct: 1 }, // [cite: 192]
-    { q: "¿Cada cuánto tiempo se debe verificar ocularmente el centro de trabajo?", options: ["Cada 6 meses", "Cada 12 meses", "Cada 2 años"], correct: 1 }, // [cite: 74]
-    { q: "¿Cuál es la pendiente máxima permitida para rampas de tránsito peatonal?", options: ["5%", "10%", "15%"], correct: 1 }, // [cite: 215]
-    { q: "¿A partir de qué altura requiere 'jaula' o protección circundante una escala fija?", options: ["2 metros", "3 metros", "5 metros"], correct: 0 }, // [cite: 266]
-    { q: "¿De qué color deben ser las líneas para delimitar pasillos?", options: ["Blanco", "Rojo", "Amarillo"], correct: 2 } // [cite: 92]
+    {
+      q: "¿Cuál es el principal documento que debe existir para conocer la instalación eléctrica?",
+      options: [
+        "Plano actualizado de la instalación eléctrica",
+        "Croquis simple del edificio",
+        "Inventario de herramientas"
+      ],
+      correct: 0
+    },
+    {
+      q: "¿Qué tipo de contacto ocurre al tocar una parte activa?",
+      options: ["Contacto indirecto", "Contacto directo", "Contacto mixto"],
+      correct: 1
+    },
+    {
+      q: "¿Quién puede realizar trabajos en instalaciones energizadas?",
+      options: [
+        "Cualquier trabajador con experiencia",
+        "Solo personal autorizado y capacitado",
+        "Supervisores administrativos"
+      ],
+      correct: 1
+    },
+    {
+      q: "¿Qué equipo es obligatorio para trabajos con riesgo de arco eléctrico?",
+      options: [
+        "Guantes de carnaza",
+        "Protección dieléctrica y facial",
+        "Casco estándar"
+      ],
+      correct: 1
+    }
   ]
 };

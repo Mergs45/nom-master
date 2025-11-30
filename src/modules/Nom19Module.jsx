@@ -1,210 +1,240 @@
 // src/modules/Nom19Module.jsx
 import React, { useState } from "react";
-import { nom019Data } from "../data/nom19";
 import Card from "../components/card";
 import SectionTitle from "../components/SectionTitle";
+import { nom019Data } from "../data/nom19";
 import { iconMap } from "../utils/iconMap";
-import { 
-  BookOpen, Shield, Activity, CheckCircle, Briefcase, 
-  User, UserCheck, FileText, Eye, AlertTriangle 
-} from "lucide-react";
 
 export default function Nom19Module({ onComplete }) {
-  const [selectedRole, setSelectedRole] = useState(nom019Data.interactiveGuide[0]);
-  const [quizAnswers, setQuizAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
+  const [activeTab, setActiveTab] = useState("info");
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [answers, setAnswers] = useState({});
+  const [done, setDone] = useState(false);
 
-  const handleQuizOption = (qIndex, oIndex) => setQuizAnswers(prev => ({ ...prev, [qIndex]: oIndex }));
-
-  const calculateScore = () => {
-    let score = 0;
-    nom019Data.quiz.forEach((q, idx) => { if (quizAnswers[idx] === q.correct) score++; });
-    return score;
+  const handleAnswer = (qIndex, optionIndex) => {
+    setAnswers({ ...answers, [qIndex]: optionIndex });
   };
 
-  const handleFinish = () => {
-    setShowResults(true);
-    if (calculateScore() === nom019Data.quiz.length && typeof onComplete === "function") {
+  const finishQuiz = () => {
+    const correct = nom019Data.quiz.every(
+      (q, i) => answers[i] === q.correct
+    );
+    if (correct) {
+      setDone(true);
       onComplete(nom019Data.id);
+    } else {
+      alert("Algunas respuestas son incorrectas. Intenta nuevamente.");
     }
   };
 
+  const RoleCard = ({ role }) => (
+    <div
+      onClick={() => setSelectedRole(role)}
+      className="cursor-pointer p-4 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-all"
+    >
+      <div className="flex items-center gap-3">
+        {iconMap[role.icon] && React.createElement(iconMap[role.icon], { size: 24, className: "text-blue-600" })}
+        <h3 className="font-bold text-slate-800">{role.name}</h3>
+      </div>
+      <p className="text-sm text-slate-500 mt-2">{role.description}</p>
+    </div>
+  );
+
   return (
-    <div className="space-y-8 animate-fade-in pb-20 transition-all">
-      {/* Etiqueta de Nivel */}
-      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 text-sm font-bold mb-[-20px] relative z-20 ml-2">
-        <Activity size={14} />
-        {nom019Data.levelTitle}
-      </div>
-
-      {/* Header */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm relative overflow-hidden">
-        <h1 className="text-3xl font-black text-slate-800 mb-2">{nom019Data.title}</h1>
-        <p className="text-slate-500 text-lg font-medium max-w-2xl">{nom019Data.subtitle}</p>
-        <p className="text-slate-400 text-sm mt-4 italic">{nom019Data.summary}</p>
-      </div>
-
-      {/* Grid: Definiciones y Obligaciones */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Conceptos Clave */}
-        <Card className="h-full border-l-4 border-l-indigo-600">
-          <SectionTitle title="Conceptos Clave" icon={<BookOpen size={20} />} />
-          <div className="space-y-4 max-h-[500px] overflow-y-auto custom-scroll pr-2">
-            {nom019Data.definitions.map((item, idx) => (
-              <div key={idx} className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                <span className="block font-bold text-indigo-700 mb-1 text-xs uppercase tracking-wide">{item.term}</span>
-                <span className="text-slate-700 text-sm leading-relaxed font-medium">{item.def}</span>
-              </div>
-            ))}
-            {/* Secciones Extra (Reglas de Constitución) */}
-            {nom019Data.sections.map((sec, idx) => (
-              <div key={`sec-${idx}`} className="bg-blue-50 p-4 rounded-lg border border-blue-100 mt-4">
-                 <div className="flex items-center gap-2 mb-2 text-blue-800 font-bold">
-                    {iconMap[sec.icon] && React.createElement(iconMap[sec.icon], { size: 16 })}
-                    <h4>{sec.title}</h4>
-                 </div>
-                 <p className="text-sm text-blue-900 mb-2">{sec.content}</p>
-                 <ul className="list-disc list-inside text-xs text-blue-800 space-y-1">
-                   {sec.bullets.map((b,i)=><li key={i}>{b}</li>)}
-                 </ul>
-              </div>
-            ))}
-          </div>
-        </Card>
-
-        {/* Obligaciones (Scrollable para listas largas) */}
-        <Card className="h-full border-l-4 border-l-emerald-600">
-          <SectionTitle title="Obligaciones" icon={<Shield size={20} />} />
-          <div className="space-y-6 max-h-[500px] overflow-y-auto custom-scroll pr-2">
-            <div>
-              <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2 sticky top-0 bg-white py-2 z-10 border-b">
-                <Briefcase size={16} className="text-emerald-600" /> Patrón (Art. 5)
-              </h3>
-              <ul className="space-y-2">
-                {nom019Data.obligations.patron.map((o,i)=> (
-                  <li key={i} className="text-sm text-slate-600 bg-emerald-50/50 p-2 rounded border border-emerald-100 flex gap-2">
-                    <span className="text-emerald-500 font-bold">•</span>
-                    {o}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2 sticky top-0 bg-white py-2 z-10 border-b">
-                <User size={16} className="text-orange-600" /> Trabajador (Art. 6)
-              </h3>
-              <ul className="space-y-2">
-                {nom019Data.obligations.worker.map((o,i)=> (
-                  <li key={i} className="text-sm text-slate-600 bg-orange-50/50 p-2 rounded border border-orange-100 flex gap-2">
-                     <span className="text-orange-500 font-bold">•</span>
-                     {o}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      {/* --- SECCIÓN INTERACTIVA: ROLES Y FUNCIONES --- */}
-      <Card className="bg-white border border-slate-300 shadow-md">
-        <div className="flex justify-between items-center mb-6">
-          <SectionTitle title="Roles y Funciones de la Comisión" icon={<UserCheck className="text-blue-600" size={20}/>} />
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest border border-slate-200 px-2 py-1 rounded">Interactivo</span>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Columna Izquierda: Botones */}
-          <div className="lg:col-span-4 flex flex-col gap-2">
-            {nom019Data.interactiveGuide.map((role) => {
-              const Icon = iconMap[role.icon];
-              const isSelected = selectedRole.id === role.id;
-              return (
-                <button 
-                  key={role.id} 
-                  onClick={() => setSelectedRole(role)} 
-                  className={`flex items-center gap-4 p-4 rounded-xl transition-all border text-left group
-                    ${isSelected 
-                      ? "bg-slate-800 text-white border-slate-800 shadow-lg scale-[1.02]" 
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300"
-                    }`}
-                >
-                  <div className={`p-2 rounded-lg ${isSelected ? "bg-white/10" : "bg-slate-100 group-hover:bg-slate-200"}`}>
-                    {Icon && <Icon size={20} className={isSelected ? "text-white" : "text-slate-500"} />}
-                  </div>
-                  <div>
-                    <span className="block font-bold text-sm">{role.name}</span>
-                    <span className={`text-[10px] ${isSelected ? "text-slate-300" : "text-slate-400"}`}>Click para ver funciones</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Columna Derecha: Detalle */}
-          <div className="lg:col-span-8 bg-slate-50 rounded-2xl p-6 border border-slate-200 flex flex-col">
-            <div className="flex items-center gap-4 mb-6 pb-4 border-b border-slate-200">
-              <div className="p-3 bg-white rounded-xl shadow-sm border border-slate-100">
-                {iconMap[selectedRole.icon] && React.createElement(iconMap[selectedRole.icon], { size: 32, className: "text-slate-800" })}
-              </div>
-              <div>
-                <h3 className="text-2xl font-black text-slate-800">{selectedRole.name}</h3>
-                <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">Responsabilidad Oficial</span>
-              </div>
-            </div>
-
-            <div className="space-y-4 flex-1">
-              <div className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm">
-                 <h4 className="text-[10px] font-black uppercase text-blue-600 mb-2">Descripción del Puesto</h4>
-                 <p className="text-slate-700 font-medium text-sm">{selectedRole.description}</p>
-              </div>
-
-              <div className="bg-white p-5 rounded-xl border border-purple-100 shadow-sm flex-1">
-                <h4 className="text-[10px] font-black uppercase text-purple-600 mb-4 flex items-center gap-2">
-                  <Activity size={12}/> {selectedRole.detailsTitle}
-                </h4>
-                <ul className="grid grid-cols-1 gap-3">
-                  {selectedRole.details.map((detail, i) => (
-                    <li key={i} className="text-sm font-medium text-slate-600 flex items-start gap-3">
-                      <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
-                      <span className="leading-snug">{detail}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* HEADER */}
+      <Card className="animate-fadeIn">
+        <h1 className="text-2xl font-black text-slate-800">
+          {nom019Data.title}
+        </h1>
+        <p className="text-slate-600 mt-1">{nom019Data.subtitle}</p>
       </Card>
 
-      {/* Quiz */}
-      <Card>
-        <SectionTitle title="Examen Rápido" icon={<CheckCircle size={20} />} />
-        {!showResults ? (
-          <div className="space-y-4">
-            {nom019Data.quiz.map((q, idx) => (
-              <div key={idx} className="pb-4 border-b border-slate-100 last:border-0">
-                <p className="font-bold text-slate-800 mb-3 text-sm">{idx + 1}. {q.q}</p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                  {q.options.map((opt, optIdx) => (
-                    <button key={optIdx} onClick={() => handleQuizOption(idx, optIdx)} className={`text-xs font-bold px-4 py-3 rounded-lg border transition-all ${quizAnswers[idx] === optIdx ? "bg-slate-800 border-slate-800 text-white shadow-md transform scale-[1.02]" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700"}`}>{opt}</button>
+      {/* TABS */}
+      <div className="flex gap-2 bg-white p-2 rounded-xl shadow border border-slate-200">
+        {[
+          { id: "info", label: "Información" },
+          { id: "roles", label: "Guía de Roles" },
+          { id: "quiz", label: "Evaluación" },
+        ].map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setActiveTab(t.id)}
+            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all
+              ${
+                activeTab === t.id
+                  ? "bg-slate-900 text-white"
+                  : "text-slate-700 hover:bg-slate-200"
+              }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* TAB: INFO */}
+      {activeTab === "info" && (
+        <div className="space-y-6 animate-fadeIn">
+          <Card>
+            <SectionTitle
+              title="Resumen General"
+              icon={<iconMap.FileText size={18} />}
+            />
+            <p className="text-slate-700 text-sm">{nom019Data.summary}</p>
+          </Card>
+
+          {/* Definiciones */}
+          <Card>
+            <SectionTitle
+              title="Definiciones"
+              icon={<iconMap.BookOpen size={18} />}
+            />
+            <ul className="space-y-3 text-sm text-slate-700">
+              {nom019Data.definitions.map((d, i) => (
+                <li key={i}>
+                  <span className="font-bold">{d.term}: </span>
+                  {d.def}
+                </li>
+              ))}
+            </ul>
+          </Card>
+
+          {/* Obligaciones */}
+          <Card>
+            <SectionTitle
+              title="Obligaciones del Patrón"
+              icon={<iconMap.Shield size={18} />}
+            />
+            <ul className="list-disc ml-5 text-sm text-slate-700 space-y-1">
+              {nom019Data.obligations.patron.map((o, i) => (
+                <li key={i}>{o}</li>
+              ))}
+            </ul>
+          </Card>
+
+          <Card>
+            <SectionTitle
+              title="Obligaciones de los Trabajadores"
+              icon={<iconMap.User size={18} />}
+            />
+            <ul className="list-disc ml-5 text-sm text-slate-700 space-y-1">
+              {nom019Data.obligations.worker.map((o, i) => (
+                <li key={i}>{o}</li>
+              ))}
+            </ul>
+          </Card>
+
+          {/* Secciones técnicas */}
+          {nom019Data.sections.map((sec, idx) => (
+            <Card key={idx}>
+              <SectionTitle
+                title={sec.title}
+                icon={
+                  iconMap[sec.icon]
+                    ? React.createElement(iconMap[sec.icon], { size: 18 })
+                    : null
+                }
+              />
+              {sec.content && (
+                <p className="text-sm text-slate-700 mb-4">{sec.content}</p>
+              )}
+              {sec.bullets && (
+                <ul className="list-disc ml-5 text-sm text-slate-700 space-y-1">
+                  {sec.bullets.map((b, i) => (
+                    <li key={i}>{b}</li>
+                  ))}
+                </ul>
+              )}
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {/* TAB: ROLES */}
+      {activeTab === "roles" && (
+        <div className="space-y-6 animate-fadeIn">
+          {!selectedRole && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {nom019Data.interactiveGuide.map((role) => (
+                <RoleCard key={role.id} role={role} />
+              ))}
+            </div>
+          )}
+
+          {/* DETALLE DEL ROL */}
+          {selectedRole && (
+            <Card>
+              <button
+                onClick={() => setSelectedRole(null)}
+                className="text-xs text-blue-600 mb-3 font-bold"
+              >
+                ← Regresar
+              </button>
+
+              <SectionTitle
+                title={selectedRole.detailsTitle}
+                icon={
+                  iconMap[selectedRole.icon] &&
+                  React.createElement(iconMap[selectedRole.icon], { size: 18 })
+                }
+              />
+
+              <ul className="list-disc ml-5 text-sm text-slate-700 space-y-1">
+                {selectedRole.details.map((d, i) => (
+                  <li key={i}>{d}</li>
+                ))}
+              </ul>
+            </Card>
+          )}
+        </div>
+      )}
+
+      {/* TAB: QUIZ */}
+      {activeTab === "quiz" && (
+        <div className="space-y-6 animate-fadeIn">
+          <Card>
+            <SectionTitle
+              title="Evaluación Final"
+              icon={<iconMap.CheckCircle size={18} />}
+            />
+
+            {nom019Data.quiz.map((q, qi) => (
+              <div key={qi} className="mb-6">
+                <p className="font-bold text-sm mb-2">{q.q}</p>
+                <div className="space-y-2">
+                  {q.options.map((opt, oi) => (
+                    <label
+                      key={oi}
+                      className="flex items-center gap-2 text-sm cursor-pointer"
+                    >
+                      <input
+                        type="radio"
+                        name={`q-${qi}`}
+                        checked={answers[qi] === oi}
+                        onChange={() => handleAnswer(qi, oi)}
+                      />
+                      {opt}
+                    </label>
                   ))}
                 </div>
               </div>
             ))}
-            <button onClick={handleFinish} className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-all shadow-md hover:shadow-lg mt-4">Calificar Módulo</button>
-          </div>
-        ) : (
-          <div className="text-center py-8 bg-green-50 rounded-xl border border-green-100">
-            <div className="inline-flex p-3 rounded-full bg-green-100 text-green-600 mb-3">
-              <CheckCircle size={32} />
-            </div>
-            <h3 className="text-2xl font-black text-slate-800 mb-1">Resultado: {calculateScore()} / {nom019Data.quiz.length}</h3>
-            <p className="text-sm text-slate-500 mb-6 font-medium">{calculateScore() === nom019Data.quiz.length ? "¡Excelente! Has dominado la NOM-019." : "Te falta un poco, revisa los roles de nuevo."}</p>
-            <button onClick={() => { setShowResults(false); setQuizAnswers({}); }} className="text-blue-600 font-bold hover:underline text-sm">Intentar de nuevo</button>
-          </div>
-        )}
-      </Card>
+
+            {!done ? (
+              <button
+                onClick={finishQuiz}
+                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700"
+              >
+                Finalizar Evaluación
+              </button>
+            ) : (
+              <p className="mt-4 font-bold text-emerald-600">
+                ¡Módulo completado! 🎉
+              </p>
+            )}
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

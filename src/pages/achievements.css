@@ -1,0 +1,34 @@
+/* achievements.css – efectos visuales PRO */
+
+/* Animación suave para los logros */
+.achievement-appear {
+  animation: popIn 0.35s ease-out forwards;
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Brillo sutil para logros desbloqueados */
+.achievement-unlocked {
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.35);
+}
+
+/* Tarjeta bloqueada */
+.achievement-locked {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+/* Hover suave */
+.achievement-card:hover {
+  transform: translateY(-3px);
+  transition: transform 0.2s ease-out;
+}
